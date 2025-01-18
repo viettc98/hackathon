@@ -1,15 +1,15 @@
 import React, { PropsWithChildren, useState } from "react";
-import { VoiceProviderContext } from "./context/VoiceContext";
+import { VoiceContext } from "./context/VoiceContext";
 
 const VoiceProvider = ({ children }: PropsWithChildren) => {
   const [inputVoice, setInputVoice] = useState<string>("");
   const [isRecording, setIsRecording] = useState<boolean>(false);
   return (
-    <VoiceProviderContext.Provider
+    <VoiceContext.Provider
       value={{ inputVoice, setIsRecording, isRecording }}
     >
       {children}
-    </VoiceProviderContext.Provider>
+    </VoiceContext.Provider>
   );
 };
 
