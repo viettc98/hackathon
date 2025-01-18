@@ -12,7 +12,7 @@ const VoiceRecorder = () => {
       className="flex size-24 mt-auto items-center justify-center cursor-pointer rounded-xl bg-purple-600"
     >
       {isRecording ? (
-        <img src={"/public/audio.svg"} className="size-8" />
+        <img src={"/audio.svg"} className="size-8" />
       ) : (
         <AudioOutlined className="text-4xl text-white" />
       )}
