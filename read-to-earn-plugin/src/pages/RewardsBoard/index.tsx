@@ -36,22 +36,22 @@ const RewardsBoard = () => {
       const address = data?.account.address
       const amount = web3.utils.toWei(1, 18)
       const service = new TokenManagement()
-      const messageHash = ethers.utils.keccak256(
-        ethers.utils.solidityPack(
-          ["address", "uint256", "address"],
-          [address, amount, contractAddress]
-        )
-      )
-      const ethSignedMessageHash = ethers.utils.hashMessage(
-        ethers.utils.arrayify(messageHash)
-      )
-      const signedMsg = await data?.signMessage({
-        message: ethSignedMessageHash,
-      })
-      console.log("signedMsg", signedMsg)
+      // const messageHash = ethers.utils.keccak256(
+      //   ethers.utils.solidityPack(
+      //     ["address", "uint256", "address"],
+      //     [address, amount, contractAddress]
+      //   )
+      // )
+      // const ethSignedMessageHash = ethers.utils.hashMessage(
+      //   ethers.utils.arrayify(messageHash)
+      // )
+      // const signedMsg = await data?.signMessage({
+      //   message: ethSignedMessageHash,
+      // })
+      // console.log("signedMsg", signedMsg)
 
       const hash = await service.claimToken({
-        signature: signedMsg,
+        // signature: signedMsg,
         userAddress: data?.account.address,
         amount: Number(amount),
         onSendTx: data?.sendTransaction,

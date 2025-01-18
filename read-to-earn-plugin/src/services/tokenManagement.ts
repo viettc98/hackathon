@@ -3,7 +3,7 @@ import { bookABI } from "./abi/bookABI";
 
 const RPC_URL = "https://1rpc.io/sepolia";
 
-export const contractAddress = "0xde51c9cc6aa0850f9dd7a3e6e8dff2e967a506bc";
+export const contractAddress = "0xaa2e626ade421411347894ee1ad39ede20e5430e";
 
 export class TokenManagement {
   connection: Web3;
@@ -14,17 +14,19 @@ export class TokenManagement {
 
   async claimToken(params: {
     amount: number;
-    signature: string;
+    // signature: string;
     userAddress: string;
     onSendTx: (tx: any) => Promise<string>;
   }) {
-    const { amount, signature, userAddress, onSendTx } = params;
+    const { amount
+      // , signature
+      , userAddress, onSendTx } = params;
     const { contract } = this.genContract();
 
-    const rawData = contract.methods.claim_token(amount, signature).encodeABI();
+    const rawData = contract.methods.claim_token(amount).encodeABI();
 
     const txParams = {
-      from: '0x9836fC884ed08Cf3a2e3D999D83D568DaC064141',
+      from: userAddress,
       to: contractAddress,
       data: rawData,
     };
