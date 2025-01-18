@@ -1,8 +1,7 @@
 // components/SpeechToAudio.tsx
 import { API_ROUTES, RANDOM_SPEECH } from "@/app/constants"
 import {
-  APITranscriptionResponse,
-  TranscriptionResponse,
+  APITranscriptionResponse
 } from "@/types/TranscriptionResponse"
 import { compareParagraphs } from "@/utils/matchedFunc"
 import { removePunctuationAndQuotation } from "@/utils/stringToParagraph"
