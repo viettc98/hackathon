@@ -4,7 +4,7 @@ import { BorderRadius, Color } from "../styles/configStyle";
 const Container = ({ children }: PropsWithChildren) => {
   return (
     <div
-      className="flex flex-col items-center overflow-hidden rounded-md p-5"
+      className="flex flex-col items-center overflow-hidden rounded-md p-2 pb-0"
       style={{
         width: 600,
         height: 400,
@@ -16,7 +16,7 @@ const Container = ({ children }: PropsWithChildren) => {
       <div className="flex-1 flex">
         {children}
       </div>
-      <div className="w-full flex flex-none" style={{ width: "100%" }}>
+      <div className="w-full flex-none">
         <Navigation />
       </div>
     </div>

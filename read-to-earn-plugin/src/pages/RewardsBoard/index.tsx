@@ -1,3 +1,5 @@
+import Container from "../../container";
+
 const rewards = [
   {
     tokenReward: "0.9Book",
@@ -15,30 +17,32 @@ const rewards = [
 
 const RewardsBoard = () => {
   return (
-    <div>
-      {rewards.map((reward) => {
-        return (
-          <div>
-            <div className="flex flex-col">
-              <div>Rewards</div>
-              <div>{reward.tokenReward}</div>
+    <Container>
+      <div className="flex flex-col">
+        {rewards.map((reward) => {
+          return (
+            <div className="flex w-full">
+              <div className="flex flex-col">
+                <div>Rewards</div>
+                <div>{reward.tokenReward}</div>
+              </div>
+              <div className="flex flex-col">
+                <div>Accuracy</div>
+                <div>{reward.accuracyPercentage}</div>
+              </div>
+              <div className="flex flex-col">
+                <div>Level</div>
+                <div>{reward.level}</div>
+              </div>
+              <div className="flex flex-col">
+                <div>Timestamp</div>
+                <div>{reward.timestamp}</div>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <div>Accuracy</div>
-              <div>{reward.accuracyPercentage}</div>
-            </div>
-            <div className="flex flex-col">
-              <div>Level</div>
-              <div>{reward.level}</div>
-            </div>
-            <div className="flex flex-col">
-              <div>Timestamp</div>
-              <div>{reward.timestamp}</div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
+          );
+        })}
+      </div>
+    </Container>
   );
 };
 

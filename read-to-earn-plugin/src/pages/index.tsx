@@ -7,7 +7,6 @@ const Page = () => {
   return (
     <div
       className="flex items-center justify-center"
-      style={{ width: 600, height: 400, margin: "36px auto" }}
     >
       {currentTab === "adventure" ? <Adventure /> : <RewardsBoard />}
     </div>

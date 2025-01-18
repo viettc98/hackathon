@@ -1,9 +1,7 @@
 import { ITabType } from "../../providers/NavigationProvider";
 import { CustomerServiceOutlined, ProfileOutlined } from "@ant-design/icons";
 import { useNavigationContext } from "../../hooks/useNavigationContext";
-import styles from "./style.module.scss";
 import clsx from "clsx";
-import { Color } from "../../styles/configStyle";
 
 const NavigationTab = [
   {
@@ -41,12 +39,12 @@ const Navigation = () => {
             key={key}
           >
             <Component
-              className={clsx("text-3xl", {
+              className={clsx("text-2xl", {
                 "text-purple-500": isActive,
               })}
             />
             <p
-              className={clsx('capitalize', {
+              className={clsx('capitalize py-2', {
                 "text-purple-500": isActive,
               })}
             >

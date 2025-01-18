@@ -1,13 +1,9 @@
-import { purpleDark } from "@ant-design/colors";
 import { AudioOutlined } from "@ant-design/icons";
 
 const VoiceRecorder = () => {
   return (
     <div
-      className="flex size-32 items-center justify-center rounded-xl"
-      style={{
-        backgroundColor: purpleDark.primary,
-      }}
+      className="flex size-24 mt-auto items-center justify-center cursor-pointer rounded-xl bg-purple-600"
     >
       <AudioOutlined className="text-4xl text-white" />
     </div>

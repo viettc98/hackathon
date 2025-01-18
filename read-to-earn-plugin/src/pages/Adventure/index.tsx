@@ -7,10 +7,10 @@ const Adventure = () => {
   return (
     <Container>
       <div className="flex flex-col items-center">
-        <div className="flex flex-1" style={{ margin: "16px auto" }}>
+        <div className="flex flex-none" style={{ margin: "16px auto" }}>
           <ConnectButton />
         </div>
-        <div className="flex flex-none">
+        <div className="flex max-h-36">
           <Paragraph />
         </div>
         <div className="flex flex-1">
