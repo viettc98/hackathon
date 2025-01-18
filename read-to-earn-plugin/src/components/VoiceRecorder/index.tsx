@@ -1,11 +1,18 @@
-import { AudioOutlined } from "@ant-design/icons";
-import { useVoiceContext } from "../../hooks/useVoiceContext";
+import { AudioOutlined } from "@ant-design/icons"
+import { useVoiceContext } from "../../hooks/useVoiceContext"
+import { useVoice } from "../../providers/VoiceProvider"
 
 const VoiceRecorder = () => {
-  const { isRecording, setIsRecording } = useVoiceContext();
+  const { isRecording, setIsRecording } = useVoiceContext()
+  const { startRecording, stopRecording } = useVoice()
   const toggleRecordingState = () => {
-    setIsRecording(!isRecording);
-  };
+    if (isRecording) {
+      stopRecording()
+    } else {
+      startRecording()
+    }
+    setIsRecording(!isRecording)
+  }
   return (
     <div
       onClick={toggleRecordingState}
@@ -17,7 +24,7 @@ const VoiceRecorder = () => {
         <AudioOutlined className="text-4xl" />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default VoiceRecorder;
+export default VoiceRecorder

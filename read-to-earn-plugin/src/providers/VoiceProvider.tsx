@@ -1,31 +1,93 @@
-import React, { PropsWithChildren, useContext, useEffect, useState } from "react";
-import { RANDOM_SPEECH } from "../constants";
+import React, {
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
+import { RANDOM_SPEECH } from "../constants"
+import { handleGetVoiceData } from "../utils/handleGetVoiceData"
 
 export interface IVoiceProvider {
-  inputVoice: string;
-  setInputVoice: (inputVoice: string) => void;
-  finalTranscript: string;
-  setFinalTranscript: (finalTranscript: string) => void;
-  script: string;
-  setScript: (script: string) => void;
+  inputVoice: string
+  setInputVoice: (inputVoice: string) => void
+  finalTranscript: string
+  setFinalTranscript: (finalTranscript: string) => void
+  script: string
+  setScript: (script: string) => void
+  recognition: SpeechRecognition | null
+  setRecognition: (recognition: SpeechRecognition | null) => void
+  audioBlob: Blob | null
+  setAudioBlob: (audioBlob: Blob | null) => void
+  startRecording: () => void
+  stopRecording: () => void
 }
 
-const VoiceProviderContext = React.createContext({} as IVoiceProvider);
+const VoiceProviderContext = React.createContext({} as IVoiceProvider)
 
 const VoiceProvider = ({ children }: PropsWithChildren) => {
-  const [inputVoice, setInputVoice] = useState<string>("");
-  const [finalTranscript, setFinalTranscript] = useState<string>("");
-  const [script, setScript] = useState<string>("");
+  const [inputVoice, setInputVoice] = useState<string>("")
+  const [finalTranscript, setFinalTranscript] = useState<string>("")
+  const [script, setScript] = useState<string>("")
+
+  const [recognition, setRecognition] = useState<SpeechRecognition | null>(null)
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
+
+  const stopRecording = () => {
+    if (!recognition) return
+    recognition.stop()
+  }
+
+  const startRecording = async () => {
+    if (!recognition) return
+
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+    const mediaRecorder = new MediaRecorder(stream)
+    const audioChunks: BlobPart[] = []
+
+    mediaRecorder.ondataavailable = (event) => {
+      audioChunks.push(event.data)
+    }
+
+    mediaRecorder.onstop = async () => {
+      const audioBlob = new Blob(audioChunks, { type: "audio/wav" })
+      const transcript = await handleGetVoiceData(audioBlob)
+      if (!transcript) return
+      setAudioBlob(audioBlob)
+      setFinalTranscript(transcript)
+    }
+
+    mediaRecorder.start()
+    recognition.start()
+
+    recognition.onend = () => {
+      mediaRecorder.stop()
+    }
+  }
 
   useEffect(() => {
-    setScript(RANDOM_SPEECH[(Math.floor(Math.random() * RANDOM_SPEECH.length))])
+    setScript(RANDOM_SPEECH[Math.floor(Math.random() * RANDOM_SPEECH.length)])
   }, [])
   return (
-    <VoiceProviderContext.Provider value={{ inputVoice, setInputVoice, finalTranscript, setFinalTranscript, script, setScript }}>
+    <VoiceProviderContext.Provider
+      value={{
+        stopRecording,
+        startRecording,
+        inputVoice,
+        setInputVoice,
+        finalTranscript,
+        setFinalTranscript,
+        script,
+        setScript,
+        recognition,
+        setRecognition,
+        audioBlob,
+        setAudioBlob,
+      }}
+    >
       {children}
     </VoiceProviderContext.Provider>
-  );
-};
+  )
+}
 
 export const useVoice = () => {
   const context = useContext(VoiceProviderContext)
@@ -35,4 +97,4 @@ export const useVoice = () => {
   return context
 }
 
-export default VoiceProvider;
+export default VoiceProvider
