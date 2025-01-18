@@ -21,10 +21,11 @@ const Navigation = () => {
   };
 
   const handleChangeTab = (key: string) => () => {
-    // if (key === "dashboard") {
+    if (key === "dashboard") {
       activateTab("dashboard");
-    // }
-    // activateTab("adventure");
+      return
+    }
+    activateTab("adventure");
   };
 
   return (
