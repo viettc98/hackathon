@@ -32,6 +32,7 @@ export interface IVoiceProvider {
   setIsRecording: (isRecording: boolean) => void;
   reset: () => void;
   result: string | null;
+  isLoading: boolean;
 }
 
 const VoiceProviderContext = React.createContext({} as IVoiceProvider);
@@ -41,6 +42,7 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
   const [finalTranscript, setFinalTranscript] = useState<string>('');
   const [script, setScript] = useState<string>('');
   const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { data } = useWalletClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [txHash, setTxHash] = useState<string>('');
@@ -113,10 +115,12 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
     mediaRecorder.onstop = async () => {
       const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
       console.log('🚀 ~ mediaRecorder.onstop= ~ audioBlob:', audioBlob);
+      setIsLoading(true);
       const transcript = await handleGetVoiceData(audioBlob);
       if (!transcript) return;
       setAudioBlob(audioBlob);
       setFinalTranscript(transcript);
+      setIsLoading(false);
     };
 
     mediaRecorder.start();
@@ -171,6 +175,7 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
         audioBlob,
         setAudioBlob,
         showModal,
+        isLoading,
       }}
     >
       {children}
