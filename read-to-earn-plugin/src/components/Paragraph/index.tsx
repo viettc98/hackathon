@@ -1,6 +1,6 @@
 import { useVoice } from "../../providers/VoiceProvider"
 import { highlightMatchedWords } from "../../utils/highlightMatchedWords"
-import { compareParagraphs, cosineSimilarity } from "../../utils/matchedFunc"
+import { cosineSimilarity } from "../../utils/matchedFunc"
 import { removePunctuationAndQuotation } from "../../utils/stringToParagraph"
 
 const Paragraph = () => {

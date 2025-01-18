@@ -1,9 +1,9 @@
 import { ContractAbi, Web3 } from "web3";
 import { bookABI } from "./abi/bookABI";
 
-const RPC_URL = "https://eth-sepolia.public.blastapi.io";
+const RPC_URL = "https://1rpc.io/sepolia";
 
-const contractAddress = "0x427aa41d859accb70d25181c6a01662aabdcf563";
+export const contractAddress = "0xaa2e626ade421411347894ee1ad39ede20e5430e";
 
 export class TokenManagement {
   connection: Web3;
@@ -14,13 +14,16 @@ export class TokenManagement {
 
   async claimToken(params: {
     amount: number;
-    signature: string;
+    // signature: string;
     userAddress: string;
+    onSendTx: (tx: any) => Promise<string>;
   }) {
-    const { amount, signature, userAddress } = params;
+    const { amount
+      // , signature
+      , userAddress, onSendTx } = params;
     const { contract } = this.genContract();
 
-    const rawData = contract.methods.claim_token(amount, signature).encodeABI();
+    const rawData = contract.methods.claim_token(amount).encodeABI();
 
     const txParams = {
       from: userAddress,
@@ -28,8 +31,10 @@ export class TokenManagement {
       data: rawData,
     };
 
-    // const hash = sendTx(txParams);
-    return "hash";
+    console.log('txParams', txParams)
+
+    const hash = await onSendTx?.(txParams);
+    return hash;
   }
 
   private genContract() {
