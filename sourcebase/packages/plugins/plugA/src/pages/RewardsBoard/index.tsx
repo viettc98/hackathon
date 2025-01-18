@@ -4,12 +4,10 @@ import {
   TokenManagement
 } from "../../services/tokenManagement"
 
+import React, { useState } from "react"
 import Container from "../../container"
-import { useVoice } from "../../providers/VoiceProvider"
-import { highlightMatchedWords } from "../../utils/highlightMatchedWords"
-import { compareParagraphs } from "../../utils/matchedFunc"
-import { removePunctuationAndQuotation } from "../../utils/stringToParagraph"
-import React from "react"
+import { Button, Modal } from 'antd';
+
 
 // const rewards = [
 //   {
@@ -28,6 +26,20 @@ import React from "react"
 
 const RewardsBoard = () => {
   const { data } = useWalletClient()
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [txHash, setTxHash] = useState<string>("")
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const claimToken = async () => {
     try {
       if (!data?.account.address) return
@@ -53,16 +65,27 @@ const RewardsBoard = () => {
         amount: Number(amount),
         onSendTx: data?.sendTransaction,
       })
-      alert(hash)
+      setTxHash(hash)
+      showModal()
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const handleCopyTxHash = () => {
+    navigator.clipboard.writeText(txHash)
   }
   return (
     <Container>
       <div className="flex flex-col w-full gap-y-2">
         <button onClick={claimToken}>Claim</button>
       </div>
+      <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <div className="flex justify-center">
+          <p>Tx Hash: {txHash}</p>
+          <Button onClick={handleCopyTxHash}>Copy</Button>
+        </div>
+      </Modal>
     </Container>
   )
 }
