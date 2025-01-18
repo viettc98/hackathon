@@ -1,10 +1,8 @@
 import { AudioOutlined } from "@ant-design/icons"
-import { useVoiceContext } from "../../hooks/useVoiceContext"
 import { useVoice } from "../../providers/VoiceProvider"
 
 const VoiceRecorder = () => {
-  const { isRecording, setIsRecording } = useVoiceContext()
-  const { startRecording, stopRecording } = useVoice()
+  const { startRecording, stopRecording, isRecording, setIsRecording } = useVoice()
   const toggleRecordingState = () => {
     if (isRecording) {
       stopRecording()

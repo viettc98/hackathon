@@ -2,7 +2,8 @@ import axios from "axios"
 import { APITranscriptionResponse } from "../types/TranscriptionResponse"
 import { API_ROUTES } from "../constants"
 
-const API_ENDPOINT = "http://localhost:3000/"
+// const API_ENDPOINT = "https://speech-to-text-umber.vercel.app"
+const API_ENDPOINT = "https://speech-to-text-umber.vercel.app"
 export const handleGetVoiceData = async (audioBlob: Blob) => {
   try {
     const formData = new FormData()
@@ -12,7 +13,12 @@ export const handleGetVoiceData = async (audioBlob: Blob) => {
 
     const { data } = await axios.post<APITranscriptionResponse>(
       `${API_ENDPOINT}${API_ROUTES.TRANSCRIPTION}`,
-      formData
+      formData,
+      // {
+      //   headers: {
+      //     "Access-Control-Allow-Origin": "*",
+      //   },
+      // }
     )
     console.log("🚀 ~ downloadAudio ~ data:", data)
 

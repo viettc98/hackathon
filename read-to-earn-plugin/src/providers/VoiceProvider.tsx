@@ -20,6 +20,8 @@ export interface IVoiceProvider {
   setAudioBlob: (audioBlob: Blob | null) => void
   startRecording: () => void
   stopRecording: () => void
+  isRecording: boolean
+  setIsRecording: (isRecording: boolean) => void
 }
 
 const VoiceProviderContext = React.createContext({} as IVoiceProvider)
@@ -28,6 +30,7 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
   const [inputVoice, setInputVoice] = useState<string>("")
   const [finalTranscript, setFinalTranscript] = useState<string>("")
   const [script, setScript] = useState<string>("")
+  const [isRecording, setIsRecording] = useState<boolean>(false)
 
   const [recognition, setRecognition] = useState<SpeechRecognition | null>(null)
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
@@ -50,6 +53,7 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
 
     mediaRecorder.onstop = async () => {
       const audioBlob = new Blob(audioChunks, { type: "audio/wav" })
+      console.log("🚀 ~ mediaRecorder.onstop= ~ audioBlob:", audioBlob)
       const transcript = await handleGetVoiceData(audioBlob)
       if (!transcript) return
       setAudioBlob(audioBlob)
@@ -65,11 +69,23 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
   }
 
   useEffect(() => {
+    // Init app state
+    if (!("webkitSpeechRecognition" in window)) {
+      alert("Web Speech API is not supported in this browser.")
+      return
+    }
+
+    const recognitionInstance = new (window as any).webkitSpeechRecognition()
+    recognitionInstance.continuous = true
+    recognitionInstance.interimResults = true
+    setRecognition(recognitionInstance)
     setScript(RANDOM_SPEECH[Math.floor(Math.random() * RANDOM_SPEECH.length)])
   }, [])
   return (
     <VoiceProviderContext.Provider
       value={{
+        isRecording,
+        setIsRecording,
         stopRecording,
         startRecording,
         inputVoice,

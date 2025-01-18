@@ -1,7 +1,19 @@
+/* eslint-disable */
 import { TranscriptionResponse } from "@/types/TranscriptionResponse"
 import axios from "axios"
-import { NextResponse } from "next/server"
+import { NextApiRequest, NextApiResponse } from "next"
+import { NextRequest, NextResponse } from "next/server"
 
+// Endpoints
+// ========================================================
+/**
+ * Basic OPTIONS Request to simuluate OPTIONS preflight request for mutative requests
+ */
+export const OPTIONS = async (request: NextRequest) => {
+  return new NextResponse("", {
+    status: 200,
+  })
+}
 
 export async function POST(req: Request) {
   try {
@@ -16,9 +28,18 @@ export async function POST(req: Request) {
       }
     )
     console.log("🚀 ~ POST ~ data:", data)
-    return NextResponse.json({ success: true, data: data.text })
+    return NextResponse.json(
+      { success: true, data: data.text },
+      {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        },
+      }
+    )
   } catch (error) {
     console.log("🚀 ~ downloadAudio ~ error:", error)
-    return NextResponse.json({ success: false, error: 'there was an error' })
+    return NextResponse.json({ success: false, error: "there was an error" })
   }
 }
