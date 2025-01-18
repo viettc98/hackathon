@@ -33,6 +33,7 @@ const Navigation = () => {
       {NavigationTab.map((item) => {
         const { key, component: Component } = item;
         const isActive = currentTab === key;
+        console.log('isActive', {isActive, currentTab})
         return (
           <div
             className="flex-1 cursor-pointer flex flex-col items-center justify-center"
@@ -41,12 +42,14 @@ const Navigation = () => {
           >
             <Component
               className={clsx("text-2xl", {
-                "text-purple-500": isActive,
+                "text-purple-800": isActive,
+                "text-purple-300": !isActive
               })}
             />
             <p
               className={clsx('capitalize py-2', {
-                "text-purple-500": isActive,
+                "text-purple-800": isActive,
+                "text-purple-300": !isActive
               })}
             >
               {key}

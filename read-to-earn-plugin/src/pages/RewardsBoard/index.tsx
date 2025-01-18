@@ -18,10 +18,10 @@ const rewards = [
 const RewardsBoard = () => {
   return (
     <Container>
-      <div className="flex flex-col">
-        {rewards.map((reward) => {
+      <div className="flex flex-col w-full gap-y-2">
+        {rewards.map((reward, index) => {
           return (
-            <div className="flex w-full">
+            <div key={index} className="flex w-full">
               <div className="flex flex-col">
                 <div>Rewards</div>
                 <div>{reward.tokenReward}</div>

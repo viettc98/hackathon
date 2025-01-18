@@ -9,12 +9,12 @@ const VoiceRecorder = () => {
   return (
     <div
       onClick={toggleRecordingState}
-      className="flex size-24 mt-auto items-center justify-center cursor-pointer rounded-xl bg-purple-600"
+      className="flex size-16 shadow-md mt-auto items-center justify-center cursor-pointer rounded-xl bg-purple-100"
     >
       {isRecording ? (
         <img src={"/audio.svg"} className="size-10 animate-pulse" />
       ) : (
-        <AudioOutlined className="text-4xl text-white" />
+        <AudioOutlined className="text-4xl" />
       )}
     </div>
   );
