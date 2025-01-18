@@ -1,16 +1,15 @@
 import React from "react"
 import { useVoice } from "../../providers/VoiceProvider"
 import { highlightMatchedWords } from "../../utils/highlightMatchedWords"
-import { cosineSimilarity } from "../../utils/matchedFunc"
 import { removePunctuationAndQuotation } from "../../utils/stringToParagraph"
 
 const Paragraph = () => {
-  const { script, finalTranscript } = useVoice()
+  const { result, script, finalTranscript } = useVoice()
   return (
     <div className="rounded-lg text-center max-h-full mx-2 max-w-full p-4 text-wrap overflow-auto text-xl bg-white/15">
-      {finalTranscript ? (
+      {result ? (
         <>
-          <p>Result: {cosineSimilarity(script, finalTranscript)}%</p>
+          <p>Result: {result}%</p>
           {highlightMatchedWords(
             script,
             removePunctuationAndQuotation(finalTranscript.toLowerCase()).split(" ")

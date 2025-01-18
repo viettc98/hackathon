@@ -2,10 +2,15 @@ import React, {
   PropsWithChildren,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react"
 import { RANDOM_SPEECH } from "../constants"
 import { handleGetVoiceData } from "../utils/handleGetVoiceData"
+import { compareToPercentage, cosineSimilarity } from "../utils/matchedFunc"
+import { useWalletClient } from "wagmi"
+import { TokenManagement } from "../services/tokenManagement"
+import web3 from "web3"
 
 export interface IVoiceProvider {
   inputVoice: string
@@ -23,6 +28,7 @@ export interface IVoiceProvider {
   isRecording: boolean
   setIsRecording: (isRecording: boolean) => void
   reset: () => void
+  result: string | null
 }
 
 const VoiceProviderContext = React.createContext({} as IVoiceProvider)
@@ -32,7 +38,41 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
   const [finalTranscript, setFinalTranscript] = useState<string>("")
   const [script, setScript] = useState<string>("")
   const [isRecording, setIsRecording] = useState<boolean>(false)
-  
+  const { data } = useWalletClient()
+
+
+
+  const claimToken = async (amountParams: number) => {
+    try {
+      if (!data?.account.address) return
+      const amount = web3.utils.toWei(amountParams, 18)
+      const service = new TokenManagement()
+
+      const hash = await service.claimToken({
+        userAddress: data?.account.address,
+        amount: Number(amount),
+        onSendTx: data?.sendTransaction,
+      })
+      alert(hash)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const { percentage, result } = useMemo(() => {
+    const percentage = cosineSimilarity(script, finalTranscript)
+    return { percentage, result: percentage ? compareToPercentage(percentage) : null }
+  }, [script, finalTranscript])
+  useEffect(() => {
+    console.log("🚀 ~ useEffect ~ percentage:", percentage)
+    if (percentage > 80) {
+      claimToken(3)
+    } else if (percentage > 50) {
+      claimToken(2)
+    } else if (percentage > 30) {
+      claimToken(1)
+    }
+  }, [percentage])
 
   const [recognition, setRecognition] = useState<SpeechRecognition | null>(null)
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
@@ -93,6 +133,7 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
   return (
     <VoiceProviderContext.Provider
       value={{
+        result,
         reset,
         isRecording,
         setIsRecording,
