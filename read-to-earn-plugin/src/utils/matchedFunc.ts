@@ -22,7 +22,7 @@ function magnitude(vec: Record<string, number>): number {
   return Math.sqrt(Object.values(vec).reduce((sum, val) => sum + val * val, 0))
 }
 
-function cosineSimilarity(text1: string, text2: string): number {
+export function cosineSimilarity(text1: string, text2: string) {
   const words1 = tokenize(text1)
   const words2 = tokenize(text2)
 
@@ -33,7 +33,7 @@ function cosineSimilarity(text1: string, text2: string): number {
   const mag1 = magnitude(freq1)
   const mag2 = magnitude(freq2)
 
-  return dotProd / (mag1 * mag2)
+  return (dotProd / (mag1 * mag2) * 100).toFixed(2)
 }
 
 // Example usage
@@ -53,6 +53,8 @@ export function compareParagraphs(paragraph1: string, paragraph2: string) {
 
   // Count matching words
   const matches = words2.filter(word => set1.has(word)).length;
+  console.log("🚀 ~ compareParagraphs ~ matches:", matches)
+  console.log("🚀 ~ compareParagraphs ~ words1.length:", words1.length)
 
   // Calculate the percentage of matches
   const percentage = (matches / words1.length) * 100;

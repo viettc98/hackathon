@@ -1,6 +1,6 @@
 import { useVoice } from "../../providers/VoiceProvider"
 import { highlightMatchedWords } from "../../utils/highlightMatchedWords"
-import { compareParagraphs } from "../../utils/matchedFunc"
+import { compareParagraphs, cosineSimilarity } from "../../utils/matchedFunc"
 import { removePunctuationAndQuotation } from "../../utils/stringToParagraph"
 
 const Paragraph = () => {
@@ -9,10 +9,10 @@ const Paragraph = () => {
     <div className="rounded-lg text-center max-h-full mx-10 p-4 overflow-auto text-2xl bg-white/15">
       {finalTranscript ? (
         <>
-          <p>Result: {compareParagraphs(script, finalTranscript)}%</p>
+          <p>Result: {cosineSimilarity(script, finalTranscript)}%</p>
           {highlightMatchedWords(
-            finalTranscript,
-            removePunctuationAndQuotation(script.toLowerCase()).split(" ")
+            script,
+            removePunctuationAndQuotation(finalTranscript.toLowerCase()).split(" ")
           )}
         </>
       ) : (

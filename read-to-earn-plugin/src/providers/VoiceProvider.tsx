@@ -22,6 +22,7 @@ export interface IVoiceProvider {
   stopRecording: () => void
   isRecording: boolean
   setIsRecording: (isRecording: boolean) => void
+  reset: () => void
 }
 
 const VoiceProviderContext = React.createContext({} as IVoiceProvider)
@@ -31,6 +32,7 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
   const [finalTranscript, setFinalTranscript] = useState<string>("")
   const [script, setScript] = useState<string>("")
   const [isRecording, setIsRecording] = useState<boolean>(false)
+  
 
   const [recognition, setRecognition] = useState<SpeechRecognition | null>(null)
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
@@ -68,6 +70,13 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
     }
   }
 
+  const reset = () => {
+    setFinalTranscript("")
+    setScript(RANDOM_SPEECH[Math.floor(Math.random() * RANDOM_SPEECH.length)])
+    setAudioBlob(null)
+    setIsRecording(false)
+  }
+
   useEffect(() => {
     // Init app state
     if (!("webkitSpeechRecognition" in window)) {
@@ -84,6 +93,7 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
   return (
     <VoiceProviderContext.Provider
       value={{
+        reset,
         isRecording,
         setIsRecording,
         stopRecording,
