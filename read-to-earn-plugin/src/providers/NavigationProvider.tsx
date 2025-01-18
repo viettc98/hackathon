@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useState } from "react";
 import { NavigationContext } from "./context/NavigationContext";
 
 export type ITabType = "dashboard" | "adventure";
