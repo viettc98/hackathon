@@ -10,7 +10,7 @@ import './styles/global.css'
 import '@rainbow-me/rainbowkit/styles.css';
 
 export const PluginA = () => {
-  const { do_action, add_hook } = useGlobalHook();
+  const { add_hook } = useGlobalHook();
 
   const bootstrap = (_ctx: HookContextType) => {
     // Dome some thing with this;
