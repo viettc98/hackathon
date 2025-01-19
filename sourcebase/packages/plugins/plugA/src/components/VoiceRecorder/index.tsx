@@ -14,7 +14,7 @@ const VoiceRecorder = () => {
     setIsRecording(!isRecording)
   }
   return (
-    <div className="flex gap-3 my-2">
+    <div className="flex gap-3 my-2 bg-red">
       <button
         onClick={toggleRecordingState}
         disabled={isLoading}

@@ -6,7 +6,7 @@ import {
 import React from 'react';
 import App from './App';
 import './index.css'
-import './styles/global.scss'
+import './styles/global.css'
 import '@rainbow-me/rainbowkit/styles.css';
 
 export const PluginA = () => {
