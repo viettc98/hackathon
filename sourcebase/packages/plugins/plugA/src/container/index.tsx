@@ -1,6 +1,4 @@
-import { PropsWithChildren } from "react";
-import Navigation from "./Navigation";
-import React from "react";
+import React, { PropsWithChildren } from "react";
 const Container = ({ children }: PropsWithChildren) => {
   return (
     <div
@@ -9,9 +7,9 @@ const Container = ({ children }: PropsWithChildren) => {
       <div className="w-full">
         {children}
       </div>
-      <div className="w-full flex-none">
+      {/* <div className="w-full flex-none">
         <Navigation />
-      </div>
+      </div> */}
     </div>
   );
 };

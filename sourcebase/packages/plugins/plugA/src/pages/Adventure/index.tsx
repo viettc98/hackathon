@@ -11,19 +11,17 @@ const Adventure = () => {
   return (
     <Container>
       <div className="flex flex-col items-center">
-        {!isConnected ? (
-          <div className="flex flex-none" style={{ margin: '16px auto' }}>
-            {<ConnectButton />}
+        <div className="flex flex-none" style={{ margin: '16px auto' }}>
+          {<ConnectButton />}
+        </div>
+
+        <div className="flex w-full">
+          <Paragraph />
+        </div>
+        {isConnected && (
+          <div className="flex flex-1 mt-4">
+            <VoiceRecorder />
           </div>
-        ) : (
-          <>
-            <div className="flex w-full">
-              <Paragraph />
-            </div>
-            <div className="flex flex-1 mt-4">
-              <VoiceRecorder />
-            </div>
-          </>
         )}
       </div>
     </Container>
