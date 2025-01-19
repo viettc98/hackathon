@@ -1,13 +1,11 @@
-import { useWalletClient } from "wagmi"
-import web3 from "web3"
-import {
-  TokenManagement
-} from "../../services/tokenManagement"
+import { useWalletClient } from 'wagmi';
+import web3 from 'web3';
+import { TokenManagement } from '../../services/tokenManagement';
 
-import React, { useState } from "react"
-import Container from "../../container"
+import React, { useState } from 'react';
+import Container from '../../container';
 import { Button, Modal } from 'antd';
-
+import { useVoice } from '../../providers/VoiceProvider';
 
 // const rewards = [
 //   {
@@ -25,9 +23,10 @@ import { Button, Modal } from 'antd';
 // ]
 
 const RewardsBoard = () => {
-  const { data } = useWalletClient()
+  const { data } = useWalletClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [txHash, setTxHash] = useState<string>("")
+  const [txHash, setTxHash] = useState<string>('');
+  const { tokenToClaim } = useVoice();
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -42,9 +41,9 @@ const RewardsBoard = () => {
   };
   const claimToken = async () => {
     try {
-      if (!data?.account.address) return
-      const amount = web3.utils.toWei(1, 18)
-      const service = new TokenManagement()
+      if (!data?.account.address) return;
+      const amount = web3.utils.toWei(1, 18);
+      const service = new TokenManagement();
       // const messageHash = ethers.utils.keccak256(
       //   ethers.utils.solidityPack(
       //     ["address", "uint256", "address"],
@@ -64,30 +63,38 @@ const RewardsBoard = () => {
         userAddress: data?.account.address,
         amount: Number(amount),
         onSendTx: data?.sendTransaction,
-      })
-      setTxHash(hash)
-      showModal()
+      });
+      setTxHash(hash);
+      showModal();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const handleCopyTxHash = () => {
-    navigator.clipboard.writeText(txHash)
-  }
+    navigator.clipboard.writeText(txHash);
+  };
   return (
     <Container>
       <div className="flex flex-col w-full gap-y-2">
         <button onClick={claimToken}>Claim</button>
       </div>
-      <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal
+        title="Basic Modal"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <p className="text-success">
+          You're able to claim {tokenToClaim} Books
+        </p>
         <div className="flex justify-center">
           <p>Tx Hash: {txHash}</p>
           <Button onClick={handleCopyTxHash}>Copy</Button>
         </div>
       </Modal>
     </Container>
-  )
-}
+  );
+};
 
-export default RewardsBoard
+export default RewardsBoard;

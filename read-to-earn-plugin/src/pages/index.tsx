@@ -6,7 +6,7 @@ const Page = () => {
   const { currentTab } = useNavigationContext();
   return (
     <div
-      className="flex items-center justify-center"
+      className="flex items-center justify-center w-full"
     >
       {currentTab === "adventure" ? <Adventure /> : <RewardsBoard />}
     </div>

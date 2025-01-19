@@ -32,7 +32,11 @@ export interface IVoiceProvider {
   setIsRecording: (isRecording: boolean) => void;
   reset: () => void;
   result: string | null;
+  percentage: number | null;
   isLoading: boolean;
+  isClaimable: boolean;
+  handleClaimToken: () => void;
+  tokenToClaim: number;
 }
 
 const VoiceProviderContext = React.createContext({} as IVoiceProvider);
@@ -46,6 +50,8 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
   const { data } = useWalletClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [txHash, setTxHash] = useState<string>('');
+  const [tokenToClaim, setTokenToClaim] = useState<number>(0);
+
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -74,22 +80,12 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
   };
 
   const { percentage, result } = useMemo(() => {
-    const percentage = cosineSimilarity(script, finalTranscript);
+    const percentage = finalTranscript ? cosineSimilarity(script, finalTranscript) : null
     return {
       percentage,
       result: percentage ? compareToPercentage(percentage) : null,
     };
   }, [script, finalTranscript]);
-  useEffect(() => {
-    console.log('🚀 ~ useEffect ~ percentage:', percentage);
-    if (percentage > 80) {
-      claimToken(3);
-    } else if (percentage > 50) {
-      claimToken(2);
-    } else if (percentage > 30) {
-      claimToken(1);
-    }
-  }, [percentage]);
 
   const [recognition, setRecognition] = useState<SpeechRecognition | null>(
     null
@@ -131,15 +127,30 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
     };
   };
 
+  const handleClaimToken = () => {
+    if (!percentage) return;
+    let tokenToClaim = 0;
+    if (percentage > 80) {
+      tokenToClaim = 3;
+    } else if (percentage > 50) {
+      tokenToClaim = 2;
+    } else if (percentage > 30) {
+      tokenToClaim = 1;
+    }
+    claimToken(tokenToClaim);
+
+    setTokenToClaim(tokenToClaim)
+  }
+
+  const isClaimable = useMemo(() => {
+    return !!(percentage && percentage > 30);
+  }, [percentage]);
+
   const reset = () => {
     setFinalTranscript('');
     setScript(RANDOM_SPEECH[Math.floor(Math.random() * RANDOM_SPEECH.length)]);
     setAudioBlob(null);
     setIsRecording(false);
-  };
-
-  const handleCopyTxHash = () => {
-    navigator.clipboard.writeText(txHash);
   };
 
   useEffect(() => {
@@ -158,6 +169,10 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
   return (
     <VoiceProviderContext.Provider
       value={{
+        tokenToClaim,
+        isClaimable,
+        handleClaimToken,
+        percentage,
         result,
         reset,
         isRecording,
@@ -180,17 +195,17 @@ const VoiceProvider = ({ children }: PropsWithChildren) => {
     >
       {children}
       <Modal
-        title="Basic Modal"
+        title="Claim Successfully"
         open={isModalOpen}
         onCancel={handleCancel}
         okButtonProps={{ style: { display: 'none' } }}
       >
         <div className="flex flex-col justify-center">
-          <div className="text-sm">{txHash}</div>
-          <div className="flex justify-center">
-            <Button onClick={handleCopyTxHash}>
-              <CopyOutlined />
-            </Button>
+          <div className="text-sm">
+            <p className="text-success">You're able to claim {tokenToClaim} Books</p>
+            <a target="_blank" href={`https://sepolia.etherscan.io/tx/${txHash}`}>
+              {txHash}
+            </a>
           </div>
         </div>
       </Modal>
