@@ -14,6 +14,9 @@ const VoiceRecorder = () => {
     percentage,
     isClaimable,
   } = useVoice();
+    console.log("🚀 ~ VoiceRecorder ~ percentage:", percentage)
+    console.log("🚀 ~ VoiceRecorder ~ isClaimable:", isClaimable)
+
   const toggleRecordingState = () => {
     if (isRecording) {
       stopRecording();
@@ -24,7 +27,7 @@ const VoiceRecorder = () => {
   };
   return (
     <div className="flex flex-col gap-2 items-center">
-      {percentage && !isClaimable && (
+      {typeof percentage === 'number' && !isClaimable && (
         <div className="text-sm text-error">
           You are need at least to correct 30% to claim
         </div>

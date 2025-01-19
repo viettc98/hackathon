@@ -8,10 +8,10 @@ const NavigationTab = [
     component: CustomerServiceOutlined,
     key: "adventure",
   },
-  {
-    component: ProfileOutlined,
-    key: "dashboard",
-  },
+  // {
+  //   component: ProfileOutlined,
+  //   key: "dashboard",
+  // },
 ];
 
 const Navigation = () => {

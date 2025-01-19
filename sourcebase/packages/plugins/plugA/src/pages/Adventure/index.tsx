@@ -5,8 +5,16 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import React from 'react';
 import { useAccount } from 'wagmi';
 
+const formatAddress = (value: string) => {
+  return (
+    value.substring(0, 5) +
+    '...' +
+    value.substring(value.length - 5, value.length)
+  );
+};
+
 const Adventure = () => {
-  const { isConnected } = useAccount();
+  const { isConnected  } = useAccount();
 
   return (
     <Container>
