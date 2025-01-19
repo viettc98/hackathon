@@ -14,8 +14,8 @@ const VoiceRecorder = () => {
     percentage,
     isClaimable,
   } = useVoice();
-    console.log("🚀 ~ VoiceRecorder ~ percentage:", percentage)
-    console.log("🚀 ~ VoiceRecorder ~ isClaimable:", isClaimable)
+  console.log('🚀 ~ VoiceRecorder ~ percentage:', percentage);
+  console.log('🚀 ~ VoiceRecorder ~ isClaimable:', isClaimable);
 
   const toggleRecordingState = () => {
     if (isRecording) {
@@ -46,13 +46,6 @@ const VoiceRecorder = () => {
                 <AudioOutlined className="text-4xl" />
               )}
             </button>
-            <button
-              disabled={isLoading}
-              onClick={reset}
-              className={`flex size-16 shadow-md mt-auto items-center justify-center cursor-pointer rounded-xl bg-purple-100 ${isLoading ? 'opacity-50' : ''}`}
-            >
-              <ReloadOutlined className="text-4xl" />
-            </button>
           </>
         )}
 
@@ -67,6 +60,13 @@ const VoiceRecorder = () => {
             Claim
           </button>
         )}
+        <button
+          disabled={isLoading}
+          onClick={reset}
+          className={`flex size-16 shadow-md mt-auto items-center justify-center cursor-pointer rounded-xl bg-purple-100 ${isLoading ? 'opacity-50' : ''}`}
+        >
+          <ReloadOutlined className="text-4xl" />
+        </button>
       </div>
     </div>
   );
